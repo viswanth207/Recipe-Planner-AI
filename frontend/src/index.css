@@ -1,0 +1,45 @@
+/* Base styles for the application */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+@import "tailwindcss";
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc; /* slate-50 */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Brand helpers */
+.brand-gradient {
+  background: linear-gradient(90deg, #0f172a 0%, #065f46 100%);
+}
+
+/* Auth page background: soft layered radial + linear gradients */
+.auth-bg {
+  min-height: 100vh;
+  background-image: linear-gradient(180deg, #fff7ed 0%, #f7f5f0 100%);
+}
+
+/* Simple fade-in animation for card */
+.fade-in {
+  animation: fadeIn 500ms ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Reveal on scroll utility */
+.reveal { opacity: 0; transform: translateY(8px); transition: opacity 600ms ease, transform 600ms ease; will-change: opacity, transform; }
+.reveal-visible { opacity: 1; transform: none; }
