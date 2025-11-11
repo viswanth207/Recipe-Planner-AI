@@ -72,3 +72,8 @@ def _health():
 @app.get("/favicon.ico")
 def _favicon():
     return Response(status_code=204)
+
+# Simple root endpoint for deployment verification
+@app.get("/")
+def _root():
+    return Response(content="hi", media_type="text/plain")

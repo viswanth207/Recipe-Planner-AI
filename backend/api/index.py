@@ -34,6 +34,11 @@ except Exception as e:
                 # Quiet browser's automatic favicon request
                 return Response(status_code=204)
 
+            @_fallback.get("/")
+            def _root():
+                # Simple text response to confirm deployment routing
+                return Response(content="hi", media_type="text/plain")
+
             app = _fallback
         except Exception:
             # If even the fallback cannot be created, re-raise the original import error
