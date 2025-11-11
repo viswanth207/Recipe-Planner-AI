@@ -9,7 +9,8 @@ MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "mongodb://l
 # JWT settings
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# Support both ACCESS_TOKEN_EXPIRE_MINUTES and legacy JWT_EXPIRATION_MINUTES
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", os.getenv("JWT_EXPIRATION_MINUTES", "30")))
 
 # WhatsApp webhook verification (Meta Cloud legacy support)
 WHATSAPP_VERIFY_TOKEN = os.getenv("WHATSAPP_VERIFY_TOKEN", "")
