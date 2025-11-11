@@ -20,7 +20,7 @@ except Exception as e:
         traceback.print_exc()
         # Provide a minimal ASGI app fallback to avoid cold-start crashes on serverless
         try:
-            from fastapi import FastAPI
+            from fastapi import FastAPI, Response
 
             _fallback = FastAPI()
 
@@ -28,6 +28,11 @@ except Exception as e:
             def _health():
                 # Expose degraded state so the deployment stays alive and returns a helpful message
                 return {"status": "degraded", "error": str(e)}
+
+            @_fallback.get("/favicon.ico")
+            def _favicon():
+                # Quiet browser's automatic favicon request
+                return Response(status_code=204)
 
             app = _fallback
         except Exception:
