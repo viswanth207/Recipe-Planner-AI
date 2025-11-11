@@ -24,6 +24,8 @@ app.add_middleware(
         "http://10.10.247.154:3000",
         # GitHub Pages origin (no path)
         "https://viswanth207.github.io",
+        # Vercel deployed frontend
+        "https://meal-planner-ai-upay.vercel.app",
     ],
     allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
