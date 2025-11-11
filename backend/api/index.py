@@ -9,6 +9,8 @@ for _p in (_project_root, _repo_root):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
+_import_error_msg = None  # capture import errors for diagnostic /health
+
 try:
     from app.main import app
 except Exception as e:
@@ -16,6 +18,7 @@ except Exception as e:
         from backend.app.main import app  # type: ignore
     except Exception as inner:
         import traceback
+        _import_error_msg = f"{e} | inner={inner}"
         print("[Vercel] Failed to import FastAPI app:", e, file=sys.stderr)
         traceback.print_exc()
         # Provide a minimal ASGI app fallback to avoid cold-start crashes on serverless
@@ -55,6 +58,12 @@ except Exception as e:
             def _root():
                 # Simple text response to confirm deployment routing
                 return Response(content="hi", media_type="text/plain")
+
+            @_fallback.get("/health")
+            def _health():
+                # Expose import failure reason to aid debugging
+                err = _import_error_msg or "import failure"
+                return {"status": "degraded", "error": str(err)}
 
             # Clarify auth endpoints when fallback is serving and support preflight
             @_fallback.get("/auth/signup")
