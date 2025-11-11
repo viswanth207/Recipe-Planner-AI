@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
@@ -42,13 +43,26 @@ app.include_router(agentic_routes.router)     # new orchestration endpoints
 @app.on_event("startup")
 def _startup():
     try:
-        init_indexes()
-        logger.info("MongoDB indexes ensured")
+        # Avoid DB init on Vercel when no Mongo env provided
+        if os.getenv("VERCEL") == "1" and not (os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")):
+            logger.warning("Skipping MongoDB index init: Vercel env without MONGO_URI")
+        else:
+            init_indexes()
+            logger.info("MongoDB indexes ensured")
     except Exception as e:
         logger.warning(f"Index initialization failed: {e}")
     try:
-        start_scheduler()
-        logger.info("Scheduler started")
+        # Disable scheduler on Vercel by default or when explicitly requested
+        disable = os.getenv("DISABLE_SCHEDULER", "").lower() in ("1", "true", "yes")
+        if os.getenv("VERCEL") == "1" or disable:
+            logger.info("Scheduler disabled for serverless environment")
+        else:
+            start_scheduler()
+            logger.info("Scheduler started")
     except Exception as e:
         # Avoid crashing app if scheduler fails
         logger.warning(f"Failed to start scheduler: {e}")
+
+@app.get("/health")
+def _health():
+    return {"status": "ok"}
