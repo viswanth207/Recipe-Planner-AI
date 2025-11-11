@@ -46,9 +46,13 @@ function AppRoutes() {
 }
 
 function App() {
+  const basename =
+    process.env.PUBLIC_URL && process.env.PUBLIC_URL !== "."
+      ? process.env.PUBLIC_URL
+      : "/";
   return (
     <>
-      <Router basename={process.env.PUBLIC_URL}>
+      <Router basename={basename}>
         <AuthProvider>
           <AppRoutes />
         </AuthProvider>
