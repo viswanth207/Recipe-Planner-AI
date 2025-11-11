@@ -7,10 +7,10 @@ from fastapi.security import OAuth2PasswordBearer
 from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 # Prefer pure-Python schemes to avoid bcrypt backend issues in CI
+# Use only pure-Python schemes to avoid binary backend issues on serverless
 pwd_context = CryptContext(
     schemes=[
         "pbkdf2_sha256",
-        "bcrypt",
         "sha256_crypt",
         "sha512_crypt",
     ],
