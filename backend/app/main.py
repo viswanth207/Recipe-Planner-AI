@@ -18,7 +18,13 @@ app = FastAPI()
 # CORS to allow frontend dev servers
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://10.10.247.154:3000",
+        # GitHub Pages origin (no path)
+        "https://viswanth207.github.io",
+    ],
     allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
