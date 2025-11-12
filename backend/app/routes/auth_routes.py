@@ -1,10 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends, Response
 import re
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from app.database import db
 from app.auth import get_password_hash, verify_password, create_access_token, decode_access_token
-from pydantic import constr
-from typing import Optional
+from typing import Optional, Annotated
 from datetime import datetime
 import pytz
 
@@ -22,7 +21,7 @@ class LoginUser(BaseModel):
     phone: Optional[str] = None
 
 class UpdatePhone(BaseModel):
-    phone: constr(strip_whitespace=True)
+    phone: Annotated[str, Field(strip_whitespace=True)]
 
 class UpdateDeliverySettings(BaseModel):
     delivery_time: Optional[str] = None  # HH:MM 24h
