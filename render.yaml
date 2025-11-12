@@ -1,4 +1,4 @@
-### Render service descriptor: pin runtime to a Python version compatible with pydantic/fastapi
+### Render service descriptor: pin runtime to Python 3.11 and force clean build
 # This file instructs Render to use Python 3.11 when building/running the service.
 services:
   - type: web
@@ -6,5 +6,7 @@ services:
     env: python
     runtime: python3.11
     plan: free
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: |
+      pip install --upgrade pip
+      pip install --no-cache-dir -r backend/requirements.txt
     startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --proxy-headers
