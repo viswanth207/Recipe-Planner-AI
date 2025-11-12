@@ -1,5 +1,5 @@
-### Render service descriptor: pin runtime to Python 3.11 and force clean build
-# This file instructs Render to use Python 3.11 when building/running the service.
+### Render service descriptor: FORCE Python 3.11 runtime and clear all caches
+# This file forces Render to use Python 3.11 and completely rebuild from scratch.
 services:
   - type: web
     name: meal-planner-backend
@@ -7,6 +7,12 @@ services:
     runtime: python3.11
     plan: free
     buildCommand: |
-      pip install --upgrade pip
-      pip install --no-cache-dir -r backend/requirements.txt
+      echo "==> Forcing Python 3.11 runtime and clearing caches"
+      rm -rf .venv __pycache__ *.pyc
+      python3.11 --version
+      pip install --upgrade pip setuptools wheel
+      pip cache purge
+      pip install --no-cache-dir --force-reinstall -r backend/requirements.txt
+      echo "==> Installed packages:"
+      pip list | grep -E "(fastapi|pydantic|uvicorn)"
     startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --proxy-headers
